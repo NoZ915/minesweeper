@@ -13,6 +13,7 @@ function boardFromUser() {
                 const board = new Board(width, numberOfMines);
                 coordinateFromUser(board, width, (row, col) => {
                     board.placeMines(row, col);
+                    board.revealCell(row, col);
                     board.printBoard();
                     gameLoop(board, width);
                 });
@@ -30,9 +31,8 @@ function coordinateFromUser(board, width, placeMinesCb) {
         let row = coordinates.split(" ")[0];
         let col = coordinates.split(" ")[1];
         if ((Number(row) <= Number(width)) && (Number(row) > 0) && (Number(col) <= Number(width)) && (Number(col) > 0)) {
-            if(placeMinesCb) placeMinesCb(row, col);
-            board.revealCell(row, col);
-        }else{
+            if (placeMinesCb) placeMinesCb(row, col);
+        } else {
             rl.question("❌ Number of row or column can't bigger than the width or smaller than 0！", () => {
                 coordinateFromUser(board, width)
             })
@@ -40,26 +40,26 @@ function coordinateFromUser(board, width, placeMinesCb) {
     })
 }
 
-function gameLoop(board, width){
-    if(!board.isGameOver){
+function gameLoop(board, width) {
+    if (!board.isGameOver) {
         rl.question("Input the coordinates, with row and column separated by a space: ", (coordinates) => {
             let row = coordinates.split(" ")[0];
             let col = coordinates.split(" ")[1];
             if ((Number(row) <= Number(width)) && (Number(row) > 0) && (Number(col) <= Number(width)) && (Number(col) > 0)) {
                 board.revealCell(row, col);
                 board.printBoard();
-                if(!board.isGameOver){
+                if (!board.isGameOver) {
                     gameLoop(board, width);
-                }else{
+                } else {
                     rl.close();
                 }
-            }else{
+            } else {
                 rl.question("❌ Number of row or column can't bigger than the width！", () => {
                     gameLoop(board, width);
                 })
             }
         })
-    }else{
+    } else {
         rl.close();
     }
 }

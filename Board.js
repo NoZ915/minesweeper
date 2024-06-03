@@ -38,7 +38,7 @@ class Board {
             let row = Math.floor(Math.random() * this.width);
             if ((!this.board[row][col].mine) && (!(row === firstRow - 1 && col === firstCol - 1))) {
                 this.board[row][col].mine = true;
-                //暫時用來觀看用
+                //作弊模式：暫時用來觀看用
                 this.board[row][col].element = this.mine;
             } else {
                 i--;
@@ -59,7 +59,7 @@ class Board {
                 this.board[row][col].element = ` ${this.countNearbyMines(row, col)}`;
             }
         } else {
-            console.log("💥 Boom! Game Over!");
+            console.log("💥 Boooom!");
             this.isGameOver = true;
         }
     }
@@ -91,6 +91,10 @@ class Board {
                 }
             }
         }
+    }
+
+    checkWinTheGame() {
+
     }
 }
 

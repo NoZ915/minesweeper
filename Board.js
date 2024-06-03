@@ -50,6 +50,8 @@ class Board {
         row = row - 1;
         col = col - 1;
 
+        this.checkWinTheGame();
+
         if (row < 0 || row >= this.width || col < 0 || col >= this.width || this.board[row][col].element === this.uncover) return;
 
         if (this.board[row][col].mine === false) {
@@ -59,8 +61,9 @@ class Board {
                 this.board[row][col].element = ` ${this.countNearbyMines(row, col)}`;
             }
         } else {
-            console.log("💥 Boooom!");
             this.isGameOver = true;
+            console.log("💥 Boooom!");
+
         }
     }
 
@@ -94,7 +97,14 @@ class Board {
     }
 
     checkWinTheGame() {
-
+        for(let i = 0; i < this.width; i++){
+            for(let j = 0; j < this.width; j++){
+                if(!this.board[i][j].mine && this.board[i][j].element !== this.cover){
+                    console.log("👑 You Win !!!!!");
+                    this.isGameOver = true;
+                }
+            }
+        }
     }
 }
 

@@ -46,9 +46,9 @@ function gameLoop(board, width) {
             let row = coordinates.split(" ")[0];
             let col = coordinates.split(" ")[1];
             if ((Number(row) <= Number(width)) && (Number(row) > 0) && (Number(col) <= Number(width)) && (Number(col) > 0)) {
-                board.revealCell(row, col);
-                board.printBoard();
                 if (!board.isGameOver) {
+                    board.revealCell(row, col);
+                    board.printBoard();
                     gameLoop(board, width);
                 } else {
                     rl.close();

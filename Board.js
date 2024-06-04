@@ -17,7 +17,8 @@ class Board {
             for (let j = 0; j < this.width; j++) {
                 const cell = {
                     element: this.cover,
-                    mine: false
+                    mine: false,
+                    flag: false
                 }
                 board[i][j] = cell;
             }
@@ -50,21 +51,25 @@ class Board {
         row = row - 1;
         col = col - 1;
 
-        this.checkWinTheGame();
-
         if (row < 0 || row >= this.width || col < 0 || col >= this.width || this.board[row][col].element === this.uncover) return;
 
         if (this.board[row][col].mine === false) {
             if (this.countNearbyMines(row, col) === 0) {
                 this.uncoverNearbyCell(row, col);
+                this.checkWinTheGame();
             } else {
                 this.board[row][col].element = ` ${this.countNearbyMines(row, col)}`;
+                this.checkWinTheGame();
             }
         } else {
             this.isGameOver = true;
             console.log("💥 Boooom!");
 
         }
+    }
+
+    placeFlag() {
+
     }
 
     countNearbyMines(row, col) {
@@ -97,14 +102,19 @@ class Board {
     }
 
     checkWinTheGame() {
-        for(let i = 0; i < this.width; i++){
-            for(let j = 0; j < this.width; j++){
-                if(!this.board[i][j].mine && this.board[i][j].element !== this.cover){
-                    console.log("👑 You Win !!!!!");
-                    this.isGameOver = true;
+        let numberOfUncover = 0;
+        for (let i = 0; i < this.width; i++) {
+            for (let j = 0; j < this.width; j++) {
+                if (!this.board[i][j].mine && this.board[i][j].element !== this.cover) {
+                    numberOfUncover++;
                 }
             }
         }
+
+        if ((Number(numberOfUncover) + Number(this.numberOfMines)) === (this.width * this.width)) {
+            console.log("👑 You Win !!!!!");
+            this.isGameOver = true;
+        } else return;
     }
 }
 

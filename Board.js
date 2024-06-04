@@ -2,11 +2,14 @@ class Board {
     constructor(width, numberOfMines) {
         this.width = width;
         this.numberOfMines = numberOfMines;
-        this.mine = "🉐";
+        this.board = this.generateBoard();
+
+        this.mine = "💥";
+        this.skull = "💀"
         this.flag = "🚩";
         this.cover = "🔲";
         this.uncover = "🔳";
-        this.board = this.generateBoard();
+        
         this.isGameOver = false;
     }
 
@@ -17,8 +20,7 @@ class Board {
             for (let j = 0; j < this.width; j++) {
                 const cell = {
                     element: this.cover,
-                    mine: false,
-                    flag: false
+                    mine: false
                 }
                 board[i][j] = cell;
             }
@@ -40,7 +42,8 @@ class Board {
             if ((!this.board[row][col].mine) && (!(row === firstRow - 1 && col === firstCol - 1))) {
                 this.board[row][col].mine = true;
                 //作弊模式：暫時用來觀看用
-                this.board[row][col].element = this.mine;
+                // this.board[row][col].element = this.mine;
+                console.log(`${row+1}, ${col+1}`);
             } else {
                 i--;
             }
@@ -62,18 +65,41 @@ class Board {
                 this.checkWinTheGame();
             }
         } else {
+            this.board[row][col].element = this.skull;
             this.isGameOver = true;
+            this.revealAllMines();
             console.log("💥 Boooom!");
-
         }
     }
 
-    placeFlag() {
+    placeFlag(selectedRow, selectedCol) {
+        selectedRow = selectedRow - 1;
+        selectedCol = selectedCol - 1;
 
+        if(this.board[selectedRow][selectedCol].element === this.uncover){
+            console.log("❌ Can't place the flag here!");
+        }else if(this.board[selectedRow][selectedCol].element === this.cover){
+            this.board[selectedRow][selectedCol].element = this.flag;
+        }else if(this.board[selectedRow][selectedCol].element === this.flag){
+            this.board[selectedRow][selectedCol].element = this.cover;
+        }
+    }
+
+    revealAllMines(){
+        for (let i = 0; i < this.width; i++) {
+            for (let j = 0; j < this.width; j++) {
+                if (this.board[i][j].mine) {
+                    if(this.board[i][j].element !== this.flag && this.board[i][j].element !== this.skull){
+                        this.board[i][j].element = this.mine;
+                    }
+                }
+            }
+        }
     }
 
     countNearbyMines(row, col) {
         let numberOfNearbyMines = 0;
+
         for (let rowOffset = -1; rowOffset <= 1; rowOffset++) {
             for (let colOffset = -1; colOffset <= 1; colOffset++) {
                 //檢查附近8格有沒有地雷
@@ -103,6 +129,7 @@ class Board {
 
     checkWinTheGame() {
         let numberOfUncover = 0;
+
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.width; j++) {
                 if (!this.board[i][j].mine && this.board[i][j].element !== this.cover) {
@@ -110,7 +137,6 @@ class Board {
                 }
             }
         }
-
         if ((Number(numberOfUncover) + Number(this.numberOfMines)) === (this.width * this.width)) {
             console.log("👑 You Win !!!!!");
             this.isGameOver = true;

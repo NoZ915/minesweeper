@@ -19,7 +19,7 @@ function boardFromUser() {
                     gameLoop(board, width);
                 });
             } else {
-                rl.question("❌ Number of mines can't bigger than the width squared！", () => {
+                rl.question("❌ Number of width or mines aren't invalid！", () => {
                     boardFromUser();
                 })
             }
@@ -45,15 +45,23 @@ function gameLoop(board, width) {
     if (!board.isGameOver) {
         rl.question("Input the coordinates, with row and column separated by a space, \n  or add 'f ' before the coordinates to flag a cell: ", (coordinates) => {
             let input = coordinates.split(" ");
-            let row = coordinates.split(" ")[0];
-            let col = coordinates.split(" ")[1];
-            if ((Number(row) <= Number(width)) && (Number(row) > 0) && (Number(col) <= Number(width)) && (Number(col) > 0)) {
-                if (!board.isGameOver) {
-                    board.revealCell(row, col);
-                    board.printBoard();
-                    gameLoop(board, width);
-                } else {
-                    rl.close();
+            if (input[0] === "f") {
+                let row = coordinates.split(" ")[1];
+                let col = coordinates.split(" ")[2];
+                board.placeFlag(row, col);
+                board.printBoard();
+                gameLoop(board, width);
+            } else if (input[0] !== "f") {
+                let row = coordinates.split(" ")[0];
+                let col = coordinates.split(" ")[1];
+                if ((Number(row) <= Number(width)) && (Number(row) > 0) && (Number(col) <= Number(width)) && (Number(col) > 0)) {
+                    if (!board.isGameOver) {
+                        board.revealCell(row, col);
+                        board.printBoard();
+                        gameLoop(board, width);
+                    } else {
+                        rl.close();
+                    }
                 }
             } else {
                 rl.question("❌ Number of row or column is invalid！", () => {

@@ -43,7 +43,7 @@ class Board {
                 this.board[row][col].mine = true;
                 //作弊模式：暫時用來觀看用
                 // this.board[row][col].element = this.mine;
-                console.log(`${row+1}, ${col+1}`);
+                // console.log(`${row+1}, ${col+1}`);
             } else {
                 i--;
             }

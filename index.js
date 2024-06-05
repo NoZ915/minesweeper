@@ -19,7 +19,7 @@ function boardFromUser() {
                     gameLoop(board, width);
                 });
             } else {
-                rl.question("❌ Number of width or mines aren't invalid！", () => {
+                rl.question("❌ Number of width or mines aren't invalid！ \n Press 'Enter' to continue the game.", () => {
                     boardFromUser();
                 })
             }
@@ -34,8 +34,8 @@ function coordinateFromUser(board, width, placeMinesCb) {
         if ((Number(row) <= Number(width)) && (Number(row) > 0) && (Number(col) <= Number(width)) && (Number(col) > 0)) {
             if (placeMinesCb) placeMinesCb(row, col);
         } else {
-            rl.question("❌ Number of row or column is invalid！", () => {
-                coordinateFromUser(board, width)
+            rl.question("❌ Number of row or column is invalid！ \n Press 'Enter' to continue the game.", () => {
+                coordinateFromUser(board, width, placeMinesCb)
             })
         }
     })
@@ -51,7 +51,7 @@ function gameLoop(board, width) {
                 board.placeFlag(row, col);
                 board.printBoard();
                 gameLoop(board, width);
-            } else if (input[0] !== "f") {
+            } else if (!isNaN(input[0]) && !isNaN(input[1])) {
                 let row = coordinates.split(" ")[0];
                 let col = coordinates.split(" ")[1];
                 if ((Number(row) <= Number(width)) && (Number(row) > 0) && (Number(col) <= Number(width)) && (Number(col) > 0)) {
@@ -64,7 +64,7 @@ function gameLoop(board, width) {
                     }
                 }
             } else {
-                rl.question("❌ Number of row or column is invalid！", () => {
+                rl.question("❌ Number of row or column is invalid！ \n Press 'Enter' to continue the game." , () => {
                     gameLoop(board, width);
                 })
             }

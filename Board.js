@@ -41,9 +41,9 @@ class Board {
             let row = Math.floor(Math.random() * this.width);
             if ((!this.board[row][col].mine) && (!(row === firstRow - 1 && col === firstCol - 1))) {
                 this.board[row][col].mine = true;
-                //作弊模式：暫時用來觀看用
+                //作弊模式：偷看看地雷在哪
                 // this.board[row][col].element = this.mine;
-                // console.log(`${row+1}, ${col+1}`);
+                console.log(`${row+1}, ${col+1}`);
             } else {
                 i--;
             }
@@ -56,7 +56,10 @@ class Board {
 
         if (row < 0 || row >= this.width || col < 0 || col >= this.width || this.board[row][col].element === this.uncover) return;
 
-        if (this.board[row][col].mine === false) {
+
+        if(this.board[row][col].element === this.flag){
+            console.log("\n 🈵 Please remove the flag first! \n")
+        }else if (this.board[row][col].mine === false) {
             if (this.countNearbyMines(row, col) === 0) {
                 this.uncoverNearbyCell(row, col);
                 this.checkWinTheGame();
@@ -68,8 +71,9 @@ class Board {
             this.board[row][col].element = this.skull;
             this.isGameOver = true;
             this.revealAllMines();
-            console.log("💥 Boooom!");
+            console.log("\n 💥 Boooom! \n ");
         }
+        
     }
 
     placeFlag(selectedRow, selectedCol) {
@@ -77,7 +81,7 @@ class Board {
         selectedCol = selectedCol - 1;
 
         if(this.board[selectedRow][selectedCol].element === this.uncover){
-            console.log("❌ Can't place the flag here!");
+            console.log("\n ❌ Can't place the flag here! \n ");
         }else if(this.board[selectedRow][selectedCol].element === this.cover){
             this.board[selectedRow][selectedCol].element = this.flag;
         }else if(this.board[selectedRow][selectedCol].element === this.flag){
@@ -132,13 +136,13 @@ class Board {
 
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.width; j++) {
-                if (!this.board[i][j].mine && this.board[i][j].element !== this.cover) {
+                if (!this.board[i][j].mine && this.board[i][j].element !== this.cover && this.board[i][j].element !== this.flag) {
                     numberOfUncover++;
                 }
             }
         }
         if ((Number(numberOfUncover) + Number(this.numberOfMines)) === (this.width * this.width)) {
-            console.log("👑 You Win !!!!!");
+            console.log("\n 👑 You Win !!!!! \n");
             this.isGameOver = true;
         } else return;
     }

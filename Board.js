@@ -2,7 +2,6 @@ class Board {
     constructor(width, numberOfMines) {
         this.width = width;
         this.numberOfMines = numberOfMines;
-        this.board = this.generateBoard();
 
         this.mine = "💥";
         this.skull = "💀"
@@ -11,6 +10,7 @@ class Board {
         this.uncover = "🔳";
         
         this.isGameOver = false;
+        this.board = this.generateBoard();
     }
 
     generateBoard() {
